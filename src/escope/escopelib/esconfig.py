@@ -23,6 +23,7 @@ import sys
 import numpy as np
 from . import esnidaq
 from . import espicodaq
+from . import esstm32h7
 import time
 
 from .Struct import Struct
@@ -125,6 +126,9 @@ def niceunitmatching(num, eg, uni):
 
 def findadapters():
     lst=[('dummy',)]
+    stmdevs = esstm32h7.deviceList()
+    for dev in stmdevs:
+        lst.append(('STM32H7', dev))
     nidevs = esnidaq.deviceList()
     for dev in nidevs:
         lst.append(('nidaq', dev))
@@ -161,6 +165,9 @@ def inputchannels(ada):
         chs = []
         for k in range(8):
             chs.append(f'ai{k}')
+    elif typ=="STM32H7":
+        chs=[]
+        chs.append(f'ai0')
     elif typ=='nidaq':
         dev = ada[1]
         chs = esnidaq.devAIChannels(dev)

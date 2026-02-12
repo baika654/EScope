@@ -204,6 +204,7 @@ def unniceunit(s, uni):
 
 def findadapters():
     lst=[('dummy',)]
+    lst.append(('SMT32H7',))
     nidevs = esnidaq.deviceList()
     for dev in nidevs:
         lst.append(('nidaq',dev))
@@ -242,7 +243,10 @@ def outputchannels(ada):
             chs.append(f'ao{k}')
         for k in range(2):
             chs.append(f'P1.{k}')
-            
+    elif typ=="SMT32H7":
+        chs=[]
+        chs.append(f'ao0')
+        chs.append(f'P1.1')    
     elif typ=='nidaq':
         dev = ada[1]
         chs = esnidaq.devAOChannels(dev)

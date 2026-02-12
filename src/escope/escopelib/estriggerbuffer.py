@@ -27,6 +27,7 @@ from .esdatasource import ESDataSource
 from .esdatasource import ESDS_Dummy
 from .esdsnidaq import ESDS_Nidaq
 from .esdspicodaq import ESDS_Picodaq
+from .esstm32h7 import ESDS_Stm32h7
 
 
 PRIMELIM = 10 # Number of samples of continuously-below-trigger required
@@ -76,6 +77,8 @@ class ESTriggerBuffer(ESDataSource):
         typ = self.cfg.hw.adapter[0]
         if typ=='dummy':
             self.source = ESDS_Dummy(self.cfg)
+        elif typ=='STM32H7':
+            self.source = ESDS_Stm32h7(self.cfg)    
         elif typ=='nidaq':
             self.source = ESDS_Nidaq(self.cfg)
         elif typ=='picodaq':

@@ -15,6 +15,7 @@ import numpy as np
 
 from .escopelib import esconfig
 from .escopelib.eshardware import ESHardware
+from .escopelib.esstm32hardware import ESStm32Hardware
 from .escopelib.eschannels import ESChannels
 from .escopelib.estrigger import ESTrigger
 from .escopelib.esvzeromarks import ESVZeroMarks
@@ -92,7 +93,7 @@ class MainWin(QMainWindow):
         self.setWindowTitle('EScope')
         self.stylize()
         self.makeContents()
-        self.place()
+        self.place()  
 
     def stylize(self):
         #self.setFont(QFont(*self.cfg.font))
@@ -349,6 +350,9 @@ class MainWin(QMainWindow):
         self.h_hw.cfgChanged.connect(self.hwChanged)
         self.docklay.addWidget(self.h_hw)
         self.h_hw.hide()
+        self.h_stm32hw = ESStm32Hardware(self.cfg)
+        self.docklay.addWidget(self.h_stm32hw)
+        self.h_stm32hw.hide()
         self.h_chn = ESChannels(self.cfg)
         self.h_chn.cfgChanged.connect(self.chnChanged)
         self.docklay.addWidget(self.h_chn)
@@ -362,6 +366,7 @@ class MainWin(QMainWindow):
     def click_hardware(self):
         self.h_hw.reconfig()
         self.h_hw.setVisible(not self.h_hw.isVisible())
+        self.h_stm32hw.setVisible(not self.h_stm32hw.isVisible())
             
     def click_channels(self):
         self.h_chn.reconfig()
@@ -653,7 +658,6 @@ def main():
     print(f'This is EScope {VERSION}')
     print("(C) 2010, 2023–2025 Daniel A. Wagenaar")
     print("EScope is free software. Click “About” to learn more.")
-    
     os.chdir(os.path.expanduser("~/Documents"))
     if not os.path.exists("EScopeData"):
         os.mkdir("EScopeData")
