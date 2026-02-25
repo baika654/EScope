@@ -43,8 +43,8 @@ class DAQPacket:
         #Array.Copy(packet, 3, self.payload, 0, self.payloadLength)
         self.channel = packet[3]
         self.payload = packet[4:4+self.payloadLength]
-        self.crc = (packet[self.payloadLength + 4] << 8) + packet[self.payloadLength + 5]
-    
+        self.crc = (packet[self.payloadLength + 3] << 8) + packet[self.payloadLength + 4]
+        
 
     @staticmethod
     def Encode(opcode:bytes, payload:bytes): 
@@ -98,6 +98,7 @@ class Opcodes:
 class ESStm32Hardware(QGroupBox):
     cfgChanged = pyqtSignal()
 
+    totalBytesRecieved = 0
     _last_instance = None
     isConnected = False
     serialPort = None
@@ -105,6 +106,9 @@ class ESStm32Hardware(QGroupBox):
     rxUSBThreadRun = False
     usbRXStopwatch = Stopwatch()
     bytesRecieved = 0
+    packetCounter = 0
+    lastPacketCount = -1
+    packetCounterHistoryArray = np.zeros((60000), dtype=np.uint16)
     
     def __init__(self, cfg):
         super().__init__(title="STM32 Hardware Config")
@@ -149,13 +153,16 @@ class ESStm32Hardware(QGroupBox):
         self.findCOMPorts()
         self.buildRates()
 
+    def getTotalBytesRecieved(self):
+        return self.totalBytesRecieved    
+
     def USBRXProcessing(self, rxPacket:DAQPacket):
         
         if (rxPacket.channel!=1):
             return
         self.bytesRecieved = self.bytesRecieved + (rxPacket.payloadLength//2)*2
-        if (rxPacket.payloadLength > 3):
-            print("A payload of size ", rxPacket.payloadLength, " was recieved")
+        #if (rxPacket.payloadLength > 3):
+        #    print("A payload of size ", rxPacket.payloadLength, " was recieved")
         if (self.bytesRecieved >=BUFFER_SIZE/2):
             #print(f"Recieved data from board. A total of 1024 bytes were transmitted")
             self.bytesRecieved = 0
@@ -169,6 +176,16 @@ class ESStm32Hardware(QGroupBox):
             if(analogInAChannels.bufferWriteIndex >= BUFFER_SIZE):
                 analogInAChannels.bufferWriteIndex = 0
         #AuxLength:any = analogInAChannels.bufferWriteIndex-analogInAChannels.bufferReadIndex
+        if ((rxPacket.crc-1)!=self.lastPacketCount):
+            print("Packet loss")
+        self.lastPacketCount = rxPacket.crc
+        self.totalBytesRecieved += (rxPacket.payloadLength-1)
+        #if (self.packetCounter < 60000):
+        #    self.packetCounterHistoryArray[self.packetCounter] = rxPacket.crc
+        #    self.packetCounter += 1
+        #else:
+        #    pass
+            
         #if (AuxLength < 0):
         #    length = AuxLength + 2048
         #else:
@@ -257,9 +274,10 @@ class ESStm32Hardware(QGroupBox):
                         if(rxDataPacketLength > 512):
                             #RX Buffer overflow
                             index = 0
+                            print("USB Error Count")
                             usbRXErrorCount += 1
-                    elif (index < (rxDataPacketLength + 3 + 2)):
-                        #Rest bytes are payload
+                    elif (index < (rxDataPacketLength + 3 + 2)): 
+                        #Rest bytes are payload 
                         rxDataPacket[index] = rxBuffer[i]
                         index+=1
                     else:

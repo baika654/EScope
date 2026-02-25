@@ -2,6 +2,7 @@
 from .esdatasource import ESDataSource
 from .esstm32hardware import ESStm32Hardware
 import numpy as np
+from time import perf_counter
 
 
 def deviceList():
@@ -13,6 +14,8 @@ def deviceList():
 class ESDS_Stm32h7(ESDataSource):
 
     ref_to_ESStm32Hardware = None
+    dataRateTimer = None
+    initialBytesRecieved = 0 
 
     def __init__(self, cfg):
         ESDataSource.__init__(self, cfg)
@@ -33,6 +36,8 @@ class ESDS_Stm32h7(ESDataSource):
         if self.timerid is not None:
             self.killTimer(self.timerid)
         self.timerid = self.startTimer(int(self.period_s*1000))
+        self.dataRateTimer = perf_counter()
+        self.initialBytesRecieved = self.ref_to_ESStm32Hardware.getTotalBytesRecieved()
         print(f"STM32H7 starting")
 
     def stop(self):
@@ -47,8 +52,9 @@ class ESDS_Stm32h7(ESDataSource):
     def getData(self, dst):
         now = min(self.ref_to_ESStm32Hardware.GetBufferDataSize()//2, dst.shape[0])
         data_in_buffer = self.ref_to_ESStm32Hardware.GetBufferData(now*2)
-        print("Date in buffer: ", self.ref_to_ESStm32Hardware.GetBufferDataSize()//2)
+        print("Data in buffer: ", self.ref_to_ESStm32Hardware.GetBufferDataSize()//2)
         print("Write buffer index = ",self.ref_to_ESStm32Hardware.GetWriteBufferIndex()," and read buffer index = ", self.ref_to_ESStm32Hardware.GetReadBufferIndex())
+        print("Data rate (bytes/sec) = ", (self.ref_to_ESStm32Hardware.getTotalBytesRecieved()-self.initialBytesRecieved)/(perf_counter()-self.dataRateTimer))
         #now = len(data_in_buffer)//2
         #temp = np.frombuffer(data_in_buffer, dtype='<u2').reshape(-1,1)
         dst[:now,:] = np.frombuffer(data_in_buffer, dtype='<u2').reshape(now,1)/10000

@@ -1,17 +1,17 @@
 <img alt="EScope and ESpark" src="https://github.com/wagenadl/escope/blob/main/docs/source/banner.svg" width="100%">
-EScope and ESpark are a software oscilloscope and function generator
-aimed primarily but not exclusively at electrophysiology.
+EScope with STM32 extension a software oscilloscope designed to be used with the ADC on STM32 microdevices.
 
 ## Screenshots
 
-EScope running in “demo” mode on Linux without a DAQ card:
+EScope sampling data from an STM32H723 card:
 
-<img alt="EScope screenshot" src="https://github.com/wagenadl/escope/blob/main/docs/source/escope.png" width="80%">
+<img alt="EScope screenshot" src="https://github.com/baika654/EScope/docs/source/EScopeSTM32.gif" width="80%">
 
-ESpark running on Windows:
+In this animated gif an audio signal from a youtube video 
+(https://www.youtube.com/watch?v=UZyb_wIjKCk) is being fed 
+into the ADC of the STM32H723 running at a sampling rate of
+20 kHz.
 
-<img alt="ESpark screenshot" src="https://github.com/wagenadl/escope/blob/main/docs/source/espark.png" width="80%">
-                              
 ## Features
 
 EScope can display traces from up to eight analog inputs
