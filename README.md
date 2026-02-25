@@ -5,7 +5,7 @@ EScope with STM32 extension a software oscilloscope designed to be used with the
 
 EScope sampling data from an STM32H723 card:
 
-<img alt="EScope screenshot" src="https://github.com/baika654/EScope/docs/source/EScopeSTM32.gif" width="80%">
+<img alt="EScope screenshot" src="https://github.com/baika654/EScope/blob/main/docs/source/EScopeSTM32.gif" width="80%">
 
 In this animated gif an audio signal from a youtube video 
 (https://www.youtube.com/watch?v=UZyb_wIjKCk) is being fed 
