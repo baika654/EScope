@@ -1,4 +1,4 @@
-<img alt="EScope and ESpark" src="https://github.com/wagenadl/escope/blob/main/docs/source/banner.svg" width="100%">
+<img alt="EScope and ESpark" src="https://github.com/baika654/EScope/blob/main/docs/source/banner.svg" width="100%">
 EScope with STM32 extension a software oscilloscope designed to be used with the ADC on STM32 microdevices.
 
 ## Screenshots
