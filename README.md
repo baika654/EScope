@@ -12,74 +12,34 @@ In this animated gif an audio signal from a youtube video
 into the ADC of the STM32H723 running at a sampling rate of
 20 kHz.
 
+## Setup
+
+To connect the audio output from some source device, the following
+circuit is used. In this case the circuit connects the audio output
+of a raspberry pi to the STM32H7 device.
+
+<img alt="Circuit diagram for STM32H723" src="https://github.com/baika654/EScope/blob/main/docs/source/CircuitDiagram.png" width="80%">
+
+
 ## Features
 
-EScope can display traces from up to eight analog inputs
-simultaneously, optionally using one of them as a trigger input. As on
+EScope can display one trace from one input on the STM32H723 device,
+optionally using the input as a trigger input. As on
 physical digital storage oscilloscopes, input signals can be DC or AC
 coupled. The vertical gain and offset can be adjusted by dragging
 corresponding user interface elements.
 
-EScope can continuously stream acquired data to disk. Alternatively,
-individually acquired single sweeps can be saved. A Python module is
-included to conveniently load saved data for further analyis.
-
-ESpark can output a variety of pulse waveforms either singly or in
-programmable trains. Up to four analog or digital channels can be
-driven concurrently. The software displays previews of the signals to
-be generated making it particularly easy for students to design
-complex stimuli.
-
-## Compatibility
-
-EScope and ESpark are compatible with most National Instruments
-multifunction data acquisition boards and does not require a LabView
-license. The software has been tested on both Windows and
-Linux. It will likely work on MacOS as well.
-
-*Important caveat:* National Instruments only fully supports a
-shockingly small number of their cards on Linux. (Many are supported
-only with “software timing”, which is completely useless.) If they do
-not properly support yours, the best I can suggest is that you loudly
-demand your money back.
-
-## Prerequisites
-
-To use with NI hardware, you first need to install the NIDAQmx
-software. This is not necessary on computers where you only wish to
-analyze data you acquired on another computer.
-
 ## Installation
 
-Installation is as easy as
+Installation is ......
 
-    pip install escope
+    To Do
     
 ## Running
 
-To run the software, open a terminal and type either
+To run the software, open a terminal and type either ....
 
-    escope
-
-or
-
-    espark
-    
-In Windows, after you run the software in this fashion once, you
-should be able to run it from the start menu as well. (If you know
-of a way to make “pip” create a start menu entry, please contact
-me or open an [Issue](https://github.com/wagenadl/escope/issues).)
-
-## Data analysis
-
-EScope includes 
-[a jupyter notebook](https://github.com/wagenadl/escope/blob/main/eg-data/egdata.ipynb) 
-showing how to load the data it saves. You can also 
-[open it in colab](https://colab.research.google.com/github/wagenadl/escope/blob/main/eg-data/egdata.ipynb). 
-
-## Extended documentation
-
-Full documentation is at [readthedocs.io](https://escope.readthedocs.io).
+    To Do
 
 ## License
 
