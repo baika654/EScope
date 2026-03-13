@@ -350,7 +350,7 @@ class MainWin(QMainWindow):
         self.h_hw.cfgChanged.connect(self.hwChanged)
         self.docklay.addWidget(self.h_hw)
         self.h_hw.hide()
-        self.h_stm32hw = ESStm32Hardware(self.cfg)
+        self.h_stm32hw = ESStm32Hardware(self.cfg, self)
         self.docklay.addWidget(self.h_stm32hw)
         self.h_stm32hw.hide()
         self.h_chn = ESChannels(self.cfg)
@@ -366,7 +366,6 @@ class MainWin(QMainWindow):
     def click_hardware(self):
         self.h_hw.reconfig()
         self.h_hw.setVisible(not self.h_hw.isVisible())
-        self.h_stm32hw.setVisible(not self.h_stm32hw.isVisible())
             
     def click_channels(self):
         self.h_chn.reconfig()

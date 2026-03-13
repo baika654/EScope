@@ -31,9 +31,25 @@ corresponding user interface elements.
 
 ## Installation
 
-Installation is ......
+Open a terminal in your home directory and install the Escope package written by Daniel Wagenaar using the command
 
-    To Do
+    pip install escope
+
+Once installed create a new subdirectory in your home directory 
+
+    mkdir ext
+
+Enter the directory and install this repo into the directory
+
+    cd ext
+    git clone https://github.com/baika654/EScope.git
+
+Once installed copy two files from the repo to the Escope install
+
+    copy <home>\ext\Escope\src\escope\escopelib\esstm32hardware.py <home>\Escope\src\escope\escopelib
+    copy <home>\ext\Escope\src\escope\escopelib\esstm32h7.py <home>\Escope\src\escope\escopelib
+
+
     
 ## Running
 

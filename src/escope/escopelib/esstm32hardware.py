@@ -81,19 +81,20 @@ class AnalogInCHStruct:
 analogInAChannels = AnalogInCHStruct()
 
 class Opcodes: 
-		reset:bytes = 0x01
-		connect:bytes = 0x02
-		disconnect:bytes = 0x03
-		setCurrentA:bytes = 0x11
-		setCurrentB:bytes = 0x12
-		setAnalogInA:bytes = 0x13
-		setAnalogInB:bytes = 0x14
-		setAnalogInACH:bytes = 0x15
-		setAnalogInBCH:bytes = 0x16
-		setAnalogOutACH:bytes = 0x17
-		setAnalogOutBCH:bytes = 0x18
-		txAnalogInA:bytes = 0x81
-		txAnalogInB:bytes = 0x82
+    reset:bytes = 0x01
+    connect:bytes = 0x02
+    disconnect:bytes = 0x03
+    setCurrentA:bytes = 0x11
+    setCurrentB:bytes = 0x12
+    setAnalogInA:bytes = 0x13
+    setAnalogInB:bytes = 0x14
+    setAnalogInACH:bytes = 0x15
+    setAnalogInBCH:bytes = 0x16
+    setAnalogOutACH:bytes = 0x17
+    setAnalogOutBCH:bytes = 0x18
+    setAnalogInASamplingFreq:bytes = 0x19
+    txAnalogInA:bytes = 0x81
+    txAnalogInB:bytes = 0x82
 
 class ESStm32Hardware(QGroupBox):
     cfgChanged = pyqtSignal()
@@ -110,8 +111,9 @@ class ESStm32Hardware(QGroupBox):
     lastPacketCount = -1
     packetCounterHistoryArray = np.zeros((60000), dtype=np.uint16)
     
-    def __init__(self, cfg):
+    def __init__(self, cfg, parent=None):
         super().__init__(title="STM32 Hardware Config")
+        self.parent_obj = parent
         ESStm32Hardware._last_instance = self
         self.setWindowTitle("EScope: Stm32 Hardware")
         self.cfg = cfg
@@ -129,6 +131,42 @@ class ESStm32Hardware(QGroupBox):
         self.cnt.setToolTip('Connect / Disconnect to STM board')
         self.cnt.setStyleSheet("background-color: red")
         self.cnt.clicked.connect(self.serialButtonClick)
+
+        self.parent_obj.h_hw.h_ada.activated.connect(self.selectHardware)
+        self.parent_obj.h_hw.h_rate.activated.connect(self.selectRate)
+
+        mainlay = self.parent_obj.centralWidget()
+
+         # Set up overall layout
+        """Although we are a QMainWindow, we don't use Qt's toolbar
+        and dockingarea system. Our overall organization is:
+        
+        self
+          - central: mainlay
+              - docks: docklay
+                  - hardware
+                  - channels
+                  - trigger
+               - main: vlay
+                   - butlay (top row of buttons)
+                   - but2lay (second row of buttons)
+                   - scope: vlay2
+                       - axlay
+                           - lpane (ESVZeroMarks)
+                           - apane (ESScopeWin)
+                           - rpane (ESVScaleMarks)
+                       - botlay
+                           - bpane (ESTMarks)
+        """
+
+        if mainlay is not None:
+            if mainlay.layout() is not None:
+                vlay = mainlay.layout().itemAt(1).widget()
+                butlay = vlay.layout().itemAt(0)
+                hw = butlay.itemAt(0).widget()
+                hw.clicked.connect(self.click_hardware)
+        else:
+            print("No central widget is currently set.")
 
         self.h_COM = QComboBox(self)
         self.h_baudrate = QComboBox(self)
@@ -341,15 +379,34 @@ class ESStm32Hardware(QGroupBox):
         #self.findRate()
         pass
 
+    def click_hardware(self):
+        if self.parent_obj.h_hw.isVisible() and self.cfg.hw.adapter[0]=="STM32H7":
+            self.parent_obj.h_stm32hw.setVisible(True)
+        else:
+            self.parent_obj.h_stm32hw.setVisible(False)      
+
     def selectHardware(self, idx):
         self.cfg.hw.adapter = self.cfg.hw.adapters[idx]
         esconfig.confighardware(self.cfg)
         self.buildRates()
+        print("Hardware change has occurred")
+        if self.parent_obj.h_hw.isVisible() and self.cfg.hw.adapter[0]=="STM32H7":
+            self.parent_obj.h_stm32hw.setVisible(True)
+        else:
+            self.parent_obj.h_stm32hw.setVisible(False)  
         self.cfgChanged.emit()
 
     def selectRate(self, idx):
-        self.cfg.hw.acqrate.value = self.cfg.hw.acqrate.values[idx]
+        
+        #self.cfgChanged.emit()
+        if self.cfg.hw.adapter[0]=="STM32H7":
+            self.cfg.hw.acqrate.value = self.cfg.hw.acqrate.values[idx]
+            print("Index value = ", idx)
+            data = bytearray(bytes([idx]))
+            if self.serialPort.is_open:
+                self.USBWrite(Opcodes.setAnalogInASamplingFreq, data)
         self.cfgChanged.emit()
+
 
     def selectCOMPort(self, idx):
         pass
