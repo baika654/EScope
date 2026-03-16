@@ -50,7 +50,7 @@ Once installed copy these three files from the repo to the Escope install
     copy <home>\ext\Escope\src\escope\escopelib\esstm32h7.py <home>\Escope\src\escope\escopelib
     copy <home>\ext\Escope\src\escope\escopelib\esstopwatch.py <home>\Escope\src\escope\escopelib
 
-Add the following lines of code to <home>\ext\Escope\src\escope\escope.py
+Add the following lines of code to `<home>`\Escope\src\escope\escope.py
 At about line 16 in the import section add
 
     from .escopelib.esstm32hardware import ESStm32Hardware
@@ -68,7 +68,7 @@ Add the following to the function makedocks()
     self.h_stm32hw.hide()
     # *********** End of new code section ********
 
-Add the following lines of code to <home>\ext\Escope\src\escope\escopelib\esconfig.py
+Add the following lines of code to `<home>`\Escope\src\escope\escopelib\esconfig.py
 Add the following line in the import section
 
     from . import esstm32h7
