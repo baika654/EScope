@@ -44,7 +44,7 @@ Enter the directory and install this repo into the directory
     cd ext
     git clone https://github.com/baika654/EScope.git
 
-Once installed copy two files from the repo to the Escope install
+Once installed copy these three files from the repo to the Escope install
 
     copy <home>\ext\Escope\src\escope\escopelib\esstm32hardware.py <home>\Escope\src\escope\escopelib
     copy <home>\ext\Escope\src\escope\escopelib\esstm32h7.py <home>\Escope\src\escope\escopelib
