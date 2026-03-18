@@ -25,9 +25,10 @@ of a raspberry pi to the STM32H7 device.
 
 EScope can display one trace from one input on the STM32H723 device,
 optionally using the input as a trigger input. As on
-physical digital storage oscilloscopes, input signals can be DC or AC
+physical digital storage oscilloscopes, input signals can be AC
 coupled. The vertical gain and offset can be adjusted by dragging
-corresponding user interface elements.
+corresponding user interface elements. As of now the voltage scale is
+not correct, so consider the scale arbitary.
 
 ## Installation
 
@@ -99,7 +100,7 @@ The software for this board can be downloaded from https://github.com/baika654/S
 
 ## To do
 
-The STM32 device can only run at a maximum sampling frequency of 20 kHz. More work on the STM32H7 code is needed to reach higher sampling frequencies.
+The STM32 device can only run at a maximum sampling frequency of 100 kHz. More work on the STM32H7 code is needed to reach higher sampling frequencies.
 
 ## License
 
